@@ -39,6 +39,11 @@ const router = new VueRouter({
           path:'/showdata',
           name:'uploadfile',
           component:()=>import('@/views/uploadfile/uploadfile')
+        },
+        {
+          path:'/tableshow',
+          name:'tableshow',
+          component:()=>import('@/views/tableshow/tableshow')
         }
       ]
     }

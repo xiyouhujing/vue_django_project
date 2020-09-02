@@ -48,6 +48,12 @@
                         name:'uploadfile',
                         label:'上传文件',
                         icon:"upload"
+                    },
+                    {
+                        path:'/tableshow',
+                        name:'tableshow',
+                        label:'数据展示',
+                        icon:"s-grid"
                     }
                 ]
             }
