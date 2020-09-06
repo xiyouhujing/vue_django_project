@@ -8,16 +8,16 @@
                 tooltip-effect="dark"
                 :row-style="{height:'90px'}"
                 style="width: 90%;margin:auto auto">
-            <!--            <el-table-column prop="movieId" label="ID"></el-table-column>-->
-            <el-table-column prop="movieName" label="电影名称"></el-table-column>
-            <el-table-column prop="directors" label="导演"></el-table-column>
-            <el-table-column prop="releaseInfo" label="上映天数"></el-table-column>
-            <el-table-column prop="boxInfo" label="当日票房"></el-table-column>
-            <el-table-column prop="sumBoxInfo" label="总票房"></el-table-column>
-            <el-table-column prop="boxRate" label="票房占比"></el-table-column>
-            <el-table-column prop="showInfo" label="排片场次"></el-table-column>
-            <el-table-column prop="showRate" label="排片占比"></el-table-column>
-            <el-table-column prop="createtime" label="日期"></el-table-column>
+            <el-table-column prop="Product_category" label="产品类别"></el-table-column>
+            <el-table-column prop="Product_name" label="产品名称"></el-table-column>
+            <el-table-column prop="Address" label="地址"></el-table-column>
+            <el-table-column prop="Customer_name" label="客户名称"></el-table-column>
+            <el-table-column prop="Development_unit" label="发展营服"></el-table-column>
+            <el-table-column prop="Customer_manager" label="客户经理"></el-table-column>
+            <el-table-column prop="Opening_status" label="完工状态"></el-table-column>
+            <el-table-column prop="Order_time" label="订单日期"></el-table-column>
+            <el-table-column prop="Completion_time" label="完工日期"></el-table-column>
+            <el-table-column prop="Quantity_ordered" label="订单数量"></el-table-column>
         </el-table>
 
         <!--分页显示功能-->
