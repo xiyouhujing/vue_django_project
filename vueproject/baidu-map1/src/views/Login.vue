@@ -35,8 +35,10 @@
                 <el-col>
                     <el-input type="text"
                               v-model="form.password"
+                              @keyup.enter.native="login"
                               placeholder="请输入密码"
                               style="align-items: center"
+                              show-password = false
                               auto-complete="off">
                         <i slot="prefix" class = "el-icon-lock"></i>
                     </el-input>
@@ -105,7 +107,8 @@
         position: relative;
     }
     .login_container {
-        background-image: linear-gradient(-180deg, #c0c0c0 0%, #0e81a5 100%);
+        background-image: linear-gradient(-180deg, #ccc 0%, #000 100%);
+        /*background-image: linear-gradient(-180deg, #c0c0c0 0%, #0e81a5 100%);*/
         /*background-image: url("../images/bg_login.png");*/
         background-repeat: no-repeat;
         background-size: cover;
