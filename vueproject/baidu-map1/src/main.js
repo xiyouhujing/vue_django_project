@@ -8,9 +8,9 @@ import BaiduMap from 'vue-baidu-map'
 import axios from "axios"
 import VueParticles from 'vue-particles'
 
-Vue.use(axios)
+//Vue.use(axios)
 Vue.config.productionTip = false
-Vue.prototype.$axios=axios
+Vue.prototype.axios=axios
 Vue.use(ElementUI)
 Vue.use(VueParticles)
 Vue.use(BaiduMap, {

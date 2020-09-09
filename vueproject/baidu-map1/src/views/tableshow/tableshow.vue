@@ -2,9 +2,7 @@
     <div>
         <div>
             <el-form :inline="true" style="margin-bottom: 10px">
-                <el-from-item >
                     <el-button class = "addbutton1" type="primary"  @click="handleAdd()">添加</el-button>
-                </el-from-item>
             </el-form>
         </div>
         <div>
@@ -19,7 +17,7 @@
                     style="width: 100%;margin:auto auto">
                 <el-table-column prop="Serial_number" label="序号">
                     <template slot-scope="scope">
-                        <el-input size="mini" v-show="scope.row.show" disabled = "false" v-model="scope.row.Serial_number"></el-input>
+                        <el-input size="mini" v-show="scope.row.show" :disabled = "true"  v-model="scope.row.Serial_number"></el-input>
                         <span v-show="!scope.row.show">{{scope.row.Serial_number}}</span>
                     </template>
                 </el-table-column>
@@ -102,7 +100,7 @@
                                     <el-button @click="scope.row.show =true" type="text" size="mini" icon="el-icon-edit">编辑</el-button>
                                 </el-dropdown-item>
                                 <el-dropdown-item>
-                                    <el-button @click="save1(scope.row)" type="text" size="mini" icon="el-icon-success">保存</el-button>
+                                    <el-button @click="save1(scope.row,scope.$index)" type="text" size="mini" icon="el-icon-success">保存</el-button>
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
@@ -126,6 +124,8 @@
 </template>
 
 <script>
+    import axios from 'axios';
+    import qs from 'qs';
     export default {
         data() {
             return {
@@ -139,11 +139,11 @@
             this.getDate();
         },
         methods: {
-            save1(row){
+            save1(row,index){
                 row.show = false
                 console.log(this.tableData)
                 //每次保存需要更新数据库中的数据
-                let param = Object.assign({}, this.tableData[row.index]);
+                let param = Object.assign({}, this.tableData[index]);
                 axios.post('http://localhost:8090//movie/addmovie', qs.stringify(param))
                     .then(res => {
                         console.log(param)
@@ -186,12 +186,12 @@
                             this.tableData.splice(index,1)
                             this.$message({
                                 type: 'info',
-                                message: '保存成功',
+                                message: '删除成功',
                             });
                         } else {
                             this.$message({
                                 type: 'info',
-                                message: '保存失败',
+                                message: '删除失败',
                             });
                         }
                     });
