@@ -40,21 +40,42 @@
                    :zoom="10"
                    :scroll-wheel-zoom = "true">
             <div v-for = "marker of markers" >
-                <bm-marker
-                        :position="{lat: marker.lat, lng: marker.lng}"
-                        :dragging="true"
-                        v-show:false
-                        @click="infoWindowOpen(marker)">
-                    <bm-info-window
-                            :show="marker.showFlag"
-                            :position="{lng: marker.lng, lat: marker.lat}"
-                            @close="infoWindowClose(marker)">
-                        <p class = "text">{{'地址：'+marker.address}}</p>
-                        <p class = "text">{{'产品名称：'+marker.prodect_name}}</p>
-                        <p class = "text">{{'完工状态：'+marker.status}}</p>
-                        <p class = "text">{{'项目经理：'+marker.customer_manager}}</p>
-                    </bm-info-window>
-                </bm-marker>
+                <div v-if = "marker.status === '未完工'">
+                    <bm-marker
+                            :position="{lat: marker.lat, lng: marker.lng}"
+                            :dragging="true"
+                            v-show:false
+                            :icon = "{url: require('../../assets/images/black.png'), size: {width: 32, height: 32}}"
+                            @click="infoWindowOpen(marker)">
+                            <bm-info-window
+                                :show="marker.showFlag"
+                                :position="{lng: marker.lng, lat: marker.lat}"
+                                @close="infoWindowClose(marker)">
+                            <p class = "text">{{'地址：'+marker.address}}</p>
+                            <p class = "text">{{'产品名称：'+marker.prodect_name}}</p>
+                            <p class = "text">{{'完工状态：'+marker.status}}</p>
+                            <p class = "text">{{'项目经理：'+marker.customer_manager}}</p>
+                        </bm-info-window>
+                    </bm-marker>
+                </div>
+                <div v-else>
+                    <bm-marker
+                            :position="{lat: marker.lat, lng: marker.lng}"
+                            :dragging="true"
+                            v-show:false
+                            :icon = "{url: require('../../assets/images/red.png'), size: {width: 32, height: 32}}"
+                            @click="infoWindowOpen(marker)">
+                            <bm-info-window
+                                :show="marker.showFlag"
+                                :position="{lng: marker.lng, lat: marker.lat}"
+                                @close="infoWindowClose(marker)">
+                            <p class = "text">{{'地址：'+marker.address}}</p>
+                            <p class = "text">{{'产品名称：'+marker.prodect_name}}</p>
+                            <p class = "text">{{'完工状态：'+marker.status}}</p>
+                            <p class = "text">{{'项目经理：'+marker.customer_manager}}</p>
+                        </bm-info-window>
+                    </bm-marker>
+                </div>
             </div>
         </baidu-map>
     </div>
