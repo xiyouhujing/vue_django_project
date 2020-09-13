@@ -144,7 +144,7 @@
                 console.log(this.tableData)
                 //每次保存需要更新数据库中的数据
                 let param = Object.assign({}, this.tableData[index]);
-                axios.post('http://localhost:8090//movie/addmovie', qs.stringify(param))
+                axios.post('/api/addData/', qs.stringify(param))
                     .then(res => {
                         console.log(param)
                         if (res.data.success) {
@@ -179,7 +179,7 @@
             },
             handleDelete(index){
                 let param = index;
-                axios.post('http://localhost:8090//movie/addmovie', qs.stringify(param))
+                axios.post('/api/delData/', qs.stringify(param))
                     .then(res => {
                         console.log(param)
                         if (res.data.success) {
@@ -197,7 +197,7 @@
                     });
             },
             getDate() {
-                axios.post('http://localhost:8090//movie/movielist').then(res => {
+                axios.post('/api/showMap/').then(res => {
                     console.log(res)
                     this.tableData = res.data;
                     this.currentPage = 1;

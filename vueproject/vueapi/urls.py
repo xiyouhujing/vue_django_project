@@ -6,4 +6,5 @@ urlpatterns = [
     url('upload/', views.upload),
     url('showMap/', views.showMap),
     url('login/', views.login),
+    url('addData/', views.addData),
 ]

@@ -216,3 +216,33 @@ def login(request):
     date = {'flag': date_flag,'msg': date_msg}
     return JsonResponse({'request': date})
 
+def addData(request):
+    if request.method=='POST':
+        pc = request.POST.get('Product_category')
+        pn = request.POST.get('Product_name')
+        ad = request.POST.get('Address')
+        cn = request.POST.get('Customer_name')
+        du = request.POST.get('Development_unit')
+        cm = request.POST.get('Customer_manager')
+        os = request.POST.get('Opening_status')
+        ot = request.POST.get('Order_time')
+        ct = request.POST.get('Completion_time')
+        qo = request.POST.get('Quantity_ordered')
+
+        Content.objects.create(
+            Product_category=pc,
+            Product_name=pn,
+            Address=ad,
+            Customer_name=cn,
+            Development_unit=du,
+            Customer_manager=cm,
+            Opening_status=os,
+            Order_time=ot,
+            Completion_time=ct,
+            Quantity_ordered=qo
+        )
+
+        print(ct)
+        print(type(ct))
+        return JsonResponse({"success": True})
+    return JsonResponse({'success': False})
