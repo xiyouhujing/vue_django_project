@@ -140,7 +140,6 @@
         },
         methods: {
             save1(row,index){
-                row.show = false
                 console.log(this.tableData)
                 //每次保存需要更新数据库中的数据
                 let param = Object.assign({}, this.tableData[index]);
@@ -151,6 +150,7 @@
                             this.$message({
                                 type: 'info',
                                 message: '保存成功',
+                                row.show = false
                             });
                         } else {
                             this.$message({
