@@ -229,20 +229,54 @@ def addData(request):
         ct = request.POST.get('Completion_time')
         qo = request.POST.get('Quantity_ordered')
 
-        Content.objects.create(
-            Product_category=pc,
-            Product_name=pn,
-            Address=ad,
-            Customer_name=cn,
-            Development_unit=du,
-            Customer_manager=cm,
-            Opening_status=os,
-            Order_time=ot,
-            Completion_time=ct,
-            Quantity_ordered=qo
-        )
-
-        print(ct)
-        print(type(ct))
-        return JsonResponse({"success": True})
-    return JsonResponse({'success': False})
+        ret = {}
+        if pc=='' or pn=='' or ad=='' or cn=='' or du=='' or cm=='' or os=='' or qo=='':
+            ret['success'] = False
+            ret['msg'] = "注意：除完工日期外，其他项不能为空"
+        if os == "未完工":
+            if ct != '':
+                ret['success'] = False
+                ret['msg'] = "注意：未完工项目无完工日期"
+            else:
+                Content.objects.create(
+                    Product_category=pc,
+                    Product_name=pn,
+                    Address=ad,
+                    Customer_name=cn,
+                    Development_unit=du,
+                    Customer_manager=cm,
+                    Opening_status=os,
+                    Order_time=ot,
+                    # Completion_time=ct,
+                    Quantity_ordered=qo
+                )
+                ret['success'] = True
+                ret['msg'] = '保存成功'
+        if os == "已完工":
+            if ct =='':
+                ret['success'] = False
+                ret['msg'] = "注意：已完工项目请填写完工日期"
+            else:
+                ot = date(*map(int, ot.split('-')))
+                ct = date(*map(int, ct.split('-')))
+                print(ot)
+                if ot > ct:
+                    ret['success'] = False
+                    ret['msg'] = "注意：完工日期应大于订单日期"
+                else:
+                    Content.objects.create(
+                        Product_category=pc,
+                        Product_name=pn,
+                        Address=ad,
+                        Customer_name=cn,
+                        Development_unit=du,
+                        Customer_manager=cm,
+                        Opening_status=os,
+                        Order_time=ot,
+                        Completion_time=ct,
+                        Quantity_ordered=qo
+                    )
+                    ret['success'] = True
+                    ret['msg'] = "保存成功"
+        return JsonResponse(ret, safe=False)
+        # return JsonResponse({'success': True})
