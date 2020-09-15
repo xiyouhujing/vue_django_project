@@ -150,8 +150,8 @@
                             this.$message({
                                 type: 'info',
                                 message: '保存成功',
-                                row.show = false
                             });
+                            row.show = false
                         } else {
                             this.$message({
                                 type: 'info',
