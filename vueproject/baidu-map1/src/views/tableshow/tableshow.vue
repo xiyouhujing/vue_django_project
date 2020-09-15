@@ -130,13 +130,14 @@
         data() {
             return {
                 tableData: [],
+                dataIndex:0,
                 // 默认显示第一条
                 currentPage: 1,
                 PageSize: 10,
             }
         },
         mounted() {
-            this.getDate();
+            this.getIndex();
         },
         methods: {
             save1(row,index){
@@ -162,7 +163,7 @@
             },
             handleAdd(){
                 this.tableData.push({
-                    Serial_number:this.tableData.length+1,
+                    Serial_number:this.dataIndex+1,
                     Product_category: '',
                     Product_name: '',
                     Address:'',
@@ -176,9 +177,10 @@
                     show:true
                     }
                 )
+                this.dataIndex++
             },
             handleDelete(index){
-                let param = index;
+                let param = this.tableData[index];
                 axios.post('/api/delData/', qs.stringify(param))
                     .then(res => {
                         console.log(param)
@@ -196,11 +198,10 @@
                         }
                     });
             },
-            getDate() {
+            getIndex() {
                 axios.post('/api/showMap/').then(res => {
                     console.log(res)
-                    this.tableData = res.data;
-                    this.currentPage = 1;
+                    this.dataIndex = res.dataIndex;
                 }, error => {
                     console.log(error)
                 })
