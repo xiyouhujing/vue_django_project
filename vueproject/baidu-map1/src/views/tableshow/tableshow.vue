@@ -131,6 +131,7 @@
             return {
                 tableData: [],
                 dataIndex:0,
+                tempIndex:[],
                 // 默认显示第一条
                 currentPage: 1,
                 PageSize: 10,
@@ -153,6 +154,8 @@
                                 message: res.data.msg,
                             });
                             row.show = false
+                            this.tempIndex[index] = this.dataIndex;
+                            this.dataIndex++
                         } else {
                             this.$message({
                                 type: 'info',
@@ -163,7 +166,7 @@
             },
             handleAdd(){
                 this.tableData.push({
-                    Serial_number:this.dataIndex+1,
+                    Serial_number:this.tableData.length+1,
                     Product_category: '',
                     Product_name: '',
                     Address:'',
@@ -177,26 +180,37 @@
                     show:true
                     }
                 )
-                this.dataIndex++
+                this.index.push(0)
             },
             handleDelete(index){
-                let param = this.tableData[index];
-                axios.post('/api/delData/', qs.stringify(param))
-                    .then(res => {
-                        console.log(param)
-                        if (res.data.success) {
-                            this.tableData.splice(index,1)
-                            this.$message({
-                                type: 'info',
-                                message: '删除成功',
-                            });
-                        } else {
-                            this.$message({
-                                type: 'info',
-                                message: '删除失败',
-                            });
-                        }
+                if(this.tempIndex[index] == 0)
+                {
+                    this.tableData.splice(index,1)
+                    this.$message({
+                        type: 'info',
+                        message: '删除成功',
                     });
+                }
+                else
+                {
+                    let param = this.tableData[index];
+                    axios.post('/api/delData/', qs.stringify(param))
+                        .then(res => {
+                            console.log(param)
+                            if (res.data.success) {
+                                this.tableData.splice(index,1)
+                                this.$message({
+                                    type: 'info',
+                                    message: '删除成功',
+                                });
+                            } else {
+                                this.$message({
+                                    type: 'info',
+                                    message: '删除失败',
+                                });
+                            }
+                        });
+                }
             },
             getIndex() {
                 axios.post('/api/showMap/').then(res => {
