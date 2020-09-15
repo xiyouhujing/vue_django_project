@@ -15,12 +15,12 @@
                     tooltip-effect="dark"
                     :row-style="{height:'48px'}"
                     style="width: 100%;margin:auto auto">
-                <el-table-column prop="Serial_number" label="序号">
+                <!--<el-table-column prop="Serial_number" label="序号">
                     <template slot-scope="scope">
                         <el-input size="mini" v-show="scope.row.show" :disabled = "true"  v-model="scope.row.Serial_number"></el-input>
                         <span v-show="!scope.row.show">{{scope.row.Serial_number}}</span>
                     </template>
-                </el-table-column>
+                </el-table-column>-->
                 <el-table-column prop="Product_category" label="产品类别">
                     <template slot-scope="scope">
                         <el-input size="mini" v-show="scope.row.show" v-model="scope.row.Product_category"></el-input>
@@ -97,7 +97,7 @@
                                     </el-button>
                                 </el-dropdown-item>
                                 <el-dropdown-item>
-                                    <el-button @click="scope.row.show =true" type="text" size="mini" icon="el-icon-edit">编辑</el-button>
+                                    <el-button @click="handleModfiy(scope.row,scope.$index)" type="text" size="mini" icon="el-icon-edit">编辑</el-button>
                                 </el-dropdown-item>
                                 <el-dropdown-item>
                                     <el-button @click="save1(scope.row,scope.$index)" type="text" size="mini" icon="el-icon-success">保存</el-button>
@@ -130,43 +130,60 @@
         data() {
             return {
                 tableData: [],
-                dataIndex:0,
                 tempIndex:[],
                 // 默认显示第一条
                 currentPage: 1,
                 PageSize: 10,
             }
         },
-        mounted() {
-            this.getIndex();
-        },
         methods: {
             save1(row,index){
-                console.log(this.tableData)
-                //每次保存需要更新数据库中的数据
-                let param = Object.assign({}, this.tableData[index]);
-                axios.post('/api/addData/', qs.stringify(param))
-                    .then(res => {
-                        console.log(param)
-                        if (res.data.success) {
-                            this.$message({
-                                type: 'info',
-                                message: res.data.msg,
-                            });
-                            row.show = false
-                            this.tempIndex[index] = this.dataIndex;
-                            this.dataIndex++
-                        } else {
-                            this.$message({
-                                type: 'info',
-                                message: res.data.msg,
-                            });
-                        }
-                    });
+                if(this.tableData[index].Serial_number == 0)  //初次保存
+                {
+                    //每次保存需要更新数据库中的数据
+                    let param = Object.assign({}, this.tableData[index]);
+                    axios.post('/api/addData/', qs.stringify(param))
+                        .then(res => {
+                            console.log(param)
+                            if (res.data.success) {
+                                this.$message({
+                                    type: 'info',
+                                    message: res.data.msg,
+                                });
+                                row.show = false
+                                this.tableData[index].Serial_number = res.data.id;
+                            } else {
+                                this.$message({
+                                    type: 'info',
+                                    message: res.data.msg,
+                                });
+                            }
+                        });
+                }
+                else{   //非初次保存
+                    let param = Object.assign({}, this.tableData[index]);
+                    axios.post('/api/addData/', qs.stringify(param))
+                        .then(res => {
+                            console.log(param)
+                            if (res.data.success) {
+                                this.$message({
+                                    type: 'info',
+                                    message: res.data.msg,
+                                });
+                                row.show = false
+                            } else {
+                                this.$message({
+                                    type: 'info',
+                                    message: res.data.msg,
+                                });
+                            }
+                        });
+                }
+
             },
             handleAdd(){
                 this.tableData.push({
-                    Serial_number:this.tableData.length+1,
+                    Serial_number:0,
                     Product_category: '',
                     Product_name: '',
                     Address:'',
@@ -180,20 +197,21 @@
                     show:true
                     }
                 )
-                this.index.push(0)
+                //this.tempIndex.push(0)
             },
             handleDelete(index){
-                if(this.tempIndex[index] == 0)
+                if(this.tableData[index].Serial_number == 0)
                 {
                     this.tableData.splice(index,1)
                     this.$message({
                         type: 'info',
                         message: '删除成功',
                     });
+                    //this.tempIndex.splice(index,1)
                 }
                 else
                 {
-                    let param = this.tableData[index];
+                    let param = this.tableData[index].Serial_number;
                     axios.post('/api/delData/', qs.stringify(param))
                         .then(res => {
                             console.log(param)
@@ -203,6 +221,7 @@
                                     type: 'info',
                                     message: '删除成功',
                                 });
+                                this.tempIndex.splice(index,1)
                             } else {
                                 this.$message({
                                     type: 'info',
@@ -212,13 +231,9 @@
                         });
                 }
             },
-            getIndex() {
-                axios.post('/api/showMap/').then(res => {
-                    console.log(res)
-                    this.dataIndex = res.dataIndex;
-                }, error => {
-                    console.log(error)
-                })
+            handleModfiy(row,index)
+            {
+                row.show =true
             },
             handleSizeChange(val) {
                 // 改变每页显示的条数
