@@ -149,13 +149,13 @@
                         if (res.data.success) {
                             this.$message({
                                 type: 'info',
-                                message: '保存成功',
+                                message: res.data.msg,
                             });
                             row.show = false
                         } else {
                             this.$message({
                                 type: 'info',
-                                message: '保存失败',
+                                message: res.data.msg,
                             });
                         }
                     });
