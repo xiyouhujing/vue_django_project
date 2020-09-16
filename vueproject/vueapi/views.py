@@ -218,6 +218,7 @@ def login(request):
 
 def addData(request):
     if request.method=='POST':
+        num = int(request.POST.get('Serial_number'))
         pc = request.POST.get('Product_category')
         pn = request.POST.get('Product_name')
         ad = request.POST.get('Address')
@@ -228,6 +229,8 @@ def addData(request):
         ot = request.POST.get('Order_time')
         ct = request.POST.get('Completion_time')
         qo = request.POST.get('Quantity_ordered')
+        # print(num)
+        # print(type(num))
 
         ret = {}
         if pc=='' or pn=='' or ad=='' or cn=='' or du=='' or cm=='' or os=='' or qo=='':
@@ -238,22 +241,40 @@ def addData(request):
                 ret['success'] = False
                 ret['msg'] = "注意：未完工项目无完工日期"
             else:
-                Content.objects.create(
-                    Product_category=pc,
-                    Product_name=pn,
-                    Address=ad,
-                    Customer_name=cn,
-                    Development_unit=du,
-                    Customer_manager=cm,
-                    Opening_status=os,
-                    Order_time=ot,
-                    # Completion_time=ct,
-                    Quantity_ordered=qo
-                )
-                ret['success'] = True
-                ret['msg'] = '保存成功'
+                if num == 0:
+                    con = Content.objects.create(
+                        Product_category=pc,
+                        Product_name=pn,
+                        Address=ad,
+                        Customer_name=cn,
+                        Development_unit=du,
+                        Customer_manager=cm,
+                        Opening_status=os,
+                        Order_time=ot,
+                        Completion_time=None,
+                        Quantity_ordered=qo
+                    )
+                    ret['success'] = True
+                    ret['msg'] = "保存成功"
+                    ret['id'] = con.id
+                    # print(con.id)
+                else:
+                    con = Content.objects.filter(id=num).update(
+                        Product_category=pc,
+                        Product_name=pn,
+                        Address=ad,
+                        Customer_name=cn,
+                        Development_unit=du,
+                        Customer_manager=cm,
+                        Opening_status=os,
+                        Order_time=ot,
+                        Completion_time=None,
+                        Quantity_ordered=qo
+                    )
+                    ret['success'] = True
+                    ret['msg'] = "保存成功"
         if os == "已完工":
-            if ct =='':
+            if ct == '':
                 ret['success'] = False
                 ret['msg'] = "注意：已完工项目请填写完工日期"
             else:
@@ -264,19 +285,51 @@ def addData(request):
                     ret['success'] = False
                     ret['msg'] = "注意：完工日期应大于订单日期"
                 else:
-                    Content.objects.create(
-                        Product_category=pc,
-                        Product_name=pn,
-                        Address=ad,
-                        Customer_name=cn,
-                        Development_unit=du,
-                        Customer_manager=cm,
-                        Opening_status=os,
-                        Order_time=ot,
-                        Completion_time=ct,
-                        Quantity_ordered=qo
-                    )
-                    ret['success'] = True
-                    ret['msg'] = "保存成功"
+                    if num == 0:
+                        con = Content.objects.create(
+                            Product_category=pc,
+                            Product_name=pn,
+                            Address=ad,
+                            Customer_name=cn,
+                            Development_unit=du,
+                            Customer_manager=cm,
+                            Opening_status=os,
+                            Order_time=ot,
+                            Completion_time=ct,
+                            Quantity_ordered=qo
+                        )
+                        ret['success'] = True
+                        ret['msg'] = "保存成功"
+                        ret['id'] = con.id
+                    else:
+                        con = Content.objects.filter(id=num).update(
+                            Product_category=pc,
+                            Product_name=pn,
+                            Address=ad,
+                            Customer_name=cn,
+                            Development_unit=du,
+                            Customer_manager=cm,
+                            Opening_status=os,
+                            Order_time=ot,
+                            Completion_time=ct,
+                            Quantity_ordered=qo
+                        )
+                        ret['success'] = True
+                        ret['msg'] = "保存成功"
         return JsonResponse(ret, safe=False)
         # return JsonResponse({'success': True})
+
+def delData(request):
+    if request.method == 'POST':
+        ret = {}
+        con_id = request.POST.get('Serial_number')
+        # print(con_id)
+        if not con_id:
+            ret['success'] = False
+            ret['msg'] = '需要删除的数据不存在'
+        else:
+            Content.objects.filter(id=con_id).delete()
+            ret['success'] = True
+            ret['msg'] = "删除成功"
+        return JsonResponse(ret, safe=False)
+

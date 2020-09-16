@@ -141,7 +141,7 @@
                 if(this.tableData[index].Serial_number == 0)  //初次保存
                 {
                     //每次保存需要更新数据库中的数据
-                    let param = Object.assign({}, this.tableData[index]);
+                    let param = Object.assign({},this.tableData[index]);
                     axios.post('/api/addData/', qs.stringify(param))
                         .then(res => {
                             console.log(param)
@@ -152,6 +152,7 @@
                                 });
                                 row.show = false
                                 this.tableData[index].Serial_number = res.data.id;
+                                console.log(res.data.id)
                             } else {
                                 this.$message({
                                     type: 'info',
@@ -211,7 +212,8 @@
                 }
                 else
                 {
-                    let param = this.tableData[index].Serial_number;
+                    let param = Object.assign({}, this.tableData[index]);
+                    console.log(param)
                     axios.post('/api/delData/', qs.stringify(param))
                         .then(res => {
                             console.log(param)
@@ -219,13 +221,13 @@
                                 this.tableData.splice(index,1)
                                 this.$message({
                                     type: 'info',
-                                    message: '删除成功',
+                                    message: res.data.msg,
                                 });
                                 this.tempIndex.splice(index,1)
                             } else {
                                 this.$message({
                                     type: 'info',
-                                    message: '删除失败',
+                                    message: res.data.msg,
                                 });
                             }
                         });

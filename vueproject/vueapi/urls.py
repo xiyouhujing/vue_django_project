@@ -7,4 +7,5 @@ urlpatterns = [
     url('showMap/', views.showMap),
     url('login/', views.login),
     url('addData/', views.addData),
+    url('delData/', views.delData),
 ]

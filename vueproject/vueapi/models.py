@@ -10,6 +10,7 @@ class File(models.Model):
         return self.name
 
 class Content(models.Model):
+    id = models.AutoField(primary_key=True)
     Product_category = models.CharField(max_length=20)
     Product_name = models.CharField(max_length=50)
     Address = models.CharField(max_length=128)
@@ -27,8 +28,8 @@ class Content(models.Model):
         return self.Address
 
 class User(models.Model):
-    username = models.CharField(max_length = 50)
-    password = models.CharField(max_length = 50)
+    username = models.CharField(max_length=50)
+    password = models.CharField(max_length=50)
 
     def __unicode__(self):
         return self.username
