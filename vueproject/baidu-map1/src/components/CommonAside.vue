@@ -52,9 +52,16 @@
                     {
                         path:'/tableshow',
                         name:'tableshow',
-                        label:'数据展示',
+                        label:'新增数据',
                         icon:"s-grid"
+                    },
+                    {
+                        path:'/showmonitordata',
+                        name:'showmonitordata',
+                        label:'监控数据展示',
+                        icon:"video-camera-solid"
                     }
+
                 ]
             }
         },

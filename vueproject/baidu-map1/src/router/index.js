@@ -39,6 +39,11 @@ const router = new VueRouter({
           path:'/tableshow',
           name:'tableshow',
           component:()=>import('@/views/tableshow/tableshow')
+        },
+        {
+          path:'/showmonitordata',
+          name:'showmonitordata',
+          component:()=>import('@/views/showmonitordata/showmonitordata')
         }
       ]
     }
