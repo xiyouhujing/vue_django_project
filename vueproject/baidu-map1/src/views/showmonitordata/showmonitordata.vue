@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-form :inline="true" :model="formInline" class="demo-form-inline" >
-            <el-col style="float: left;width: 25%;">
+            <el-col style="float: left;width: 20%;">
                 <el-form-item label="监控区域" >
                     <el-select v-model="formInline.area"  placeholder="监控区域">
                       <el-option
@@ -17,6 +17,20 @@
                 <el-form-item>
                     <el-button type="primary" @click="onSubmit">查询</el-button>
                 </el-form-item>
+            </el-col>
+            <el-col style="float: right;width: 10%;">
+                <el-upload
+                        class="upload-demo"
+                        :auto-upload= 'true'
+                        action="http://127.0.0.1:8000/api/upload"
+                        accept=".xls,.xlsx"
+                        :multiple= 'false'
+                        :limit="1"
+                        :on-exceed="handleExceed"
+                        :file-list="fileList"
+                        :http-request="uploadFile">
+                    <el-button type="primary">文件上传</el-button>
+                </el-upload>
             </el-col>
         </el-form>
         <baidu-map class="map"
@@ -104,6 +118,28 @@
             },
             infoWindowOpen (marker) {
                 marker.showFlag = true
+            },
+            uploadFile (item) {
+                console.log(item);
+                let form = new FormData();
+                form.append('file',item.file);
+                let config={
+                    headers:{'Content-type':'multipart/form-data'}
+                }
+                axios({
+                    method:"post",
+                    url:"/api/upload/",
+                    headers:{'Content-type':'multipart/form-data'},
+                    data:form
+                }).then(
+                    res=>{
+                        // console(res.data)
+                        this.$message({
+                            type:'info',
+                            message: res.data.msg
+                        })
+                    },
+                );
             }
         }
     }
