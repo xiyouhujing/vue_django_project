@@ -16,7 +16,7 @@ import pandas as pd
 import numpy as np
 from xlrd import xldate_as_tuple
 
-from .models import File,Content,User
+from .models import File,Content,User,Monitor
 
 def parse(x):
     if x is None or x == '' or pd.isnull(x):
@@ -332,4 +332,57 @@ def delData(request):
             ret['success'] = True
             ret['msg'] = "删除成功"
         return JsonResponse(ret, safe=False)
+
+def uploadMonitor(request):
+    ret = {}
+    ret['row_error'] = None
+    if request.method=='POST':
+        file_obj = request.FILES.get('file')
+        name = file_obj.name
+        size = file_obj.size
+        ret['name'] = file_obj.name
+        ret['size'] = file_obj.size
+        ret['msg'] = '上传成功！'
+
+        wb = xlrd.open_workbook(filename=file_obj.name, file_contents=file_obj.read())
+        table = wb.sheets()[0]
+        headers = table.row_values(0)
+
+        profile = File()
+        profile.name = name
+        profile.size = size
+        profile.file = file_obj
+        profile.save()
+        print('path:', profile.file.path)
+
+        rows = table.nrows
+        for row in range(1, rows):
+            row_values = table.row_values(row)
+            Monitor.objects.create(
+                Region = row_values[1],
+                Monitor_points = row_values[2],
+                Longitude = row_values[3],
+                Latitude = row_values[4],
+            )
+    return JsonResponse(ret,safe=False)
+
+def showMonitor(request):
+    if request.method=='POST':
+        region = request.POST.get('area')
+
+        if region == '':
+            monitor_data = Monitor.objects.filter()
+        else:
+            monitor_data = Monitor.objects.filter(Region=region)
+
+        mon_list = []
+        for m in monitor_data:
+            mon_dic = {}
+            mon_dic['Region'] = m.Region
+            mon_dic['Monitor_points'] = m.Monitor_points
+            mon_dic['lng'] = m.Longitude
+            mon_dic['lat'] = m.Latitude
+            mon_list.append(mon_dic)
+
+        return JsonResponse(mon_list, safe=False)
 

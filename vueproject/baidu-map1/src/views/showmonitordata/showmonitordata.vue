@@ -22,7 +22,7 @@
                 <el-upload
                         class="upload-demo"
                         :auto-upload= 'true'
-                        action="http://127.0.0.1:8000/api/upload"
+                        action="http://127.0.0.1:8000/api/uploadMonitor"
                         accept=".xls,.xlsx"
                         :multiple= 'false'
                         :limit="1"
@@ -48,10 +48,7 @@
                             :show="marker.showFlag"
                             :position="{lng: marker.lng, lat: marker.lat}"
                             @close="infoWindowClose(marker)">
-                        <p class = "text">{{'地址：'+marker.address}}</p>
-                        <p class = "text">{{'产品名称：'+marker.prodect_name}}</p>
-                        <p class = "text">{{'完工状态：'+marker.status}}</p>
-                        <p class = "text">{{'项目经理：'+marker.customer_manager}}</p>
+                        <p class = "text">{{'监控点：'+marker.Monitor_points}}</p>
                     </bm-info-window>
                 </bm-marker>
             </div>
@@ -93,7 +90,7 @@
         },
         methods: {
             getDate(){
-                axios.post('/api/showMap/').then(res=>{
+                axios.post('/api/showMonitor/').then(res=>{
                     this.markers = res.data;
                 },error=>{
                     console.log(error)
@@ -101,12 +98,9 @@
             },
             onSubmit() {
                 var params = {
-                    userName: this.formInline.user,
-                    projectStatus: this.formInline.status,
-                    beginDate: this.formInline.date1,
-                    endDate: this.formInline.date2
+                    area: this.formInline.area
                 };
-                axios.post('/api/showMap/',qs.stringify(params)).then(res=>{
+                axios.post('/api/showMonitor/',qs.stringify(params)).then(res=>{
                     this.markers = res.data;
                     console.log(this.markers);
                 },error=>{
@@ -128,7 +122,7 @@
                 }
                 axios({
                     method:"post",
-                    url:"/api/upload/",
+                    url:"/api/uploadMonitor/",
                     headers:{'Content-type':'multipart/form-data'},
                     data:form
                 }).then(

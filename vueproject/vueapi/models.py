@@ -27,6 +27,16 @@ class Content(models.Model):
     def __unicode__(self):
         return self.Address
 
+class Monitor(models.Model):
+    id = models.AutoField(primary_key=True)
+    Region = models.CharField(max_length=20)
+    Monitor_points = models.CharField(max_length=128)
+    Longitude = models.DecimalField(max_digits=15,decimal_places=12)
+    Latitude = models.DecimalField(max_digits=15,decimal_places=12)
+
+    def __unicode__(self):
+        return self.Monitor_points
+
 class User(models.Model):
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=50)

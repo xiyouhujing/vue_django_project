@@ -8,4 +8,6 @@ urlpatterns = [
     url('login/', views.login),
     url('addData/', views.addData),
     url('delData/', views.delData),
+    url('uploadMonitor/', views.uploadMonitor),
+    url('showMonitor/', views.showMonitor),
 ]
