@@ -382,6 +382,7 @@ def showMonitor(request):
             mon_dic['Monitor_points'] = m.Monitor_points
             mon_dic['lng'] = m.Longitude
             mon_dic['lat'] = m.Latitude
+            mon_dic['showFlag'] = False
             mon_list.append(mon_dic)
 
         return JsonResponse(mon_list, safe=False)
