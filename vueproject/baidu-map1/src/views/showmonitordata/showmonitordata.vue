@@ -26,8 +26,6 @@
                         accept=".xls,.xlsx"
                         :multiple= 'false'
                         :limit="1"
-                        :on-exceed="handleExceed"
-                        :file-list="fileList"
                         :http-request="uploadFile">
                     <el-button type="primary">文件上传</el-button>
                 </el-upload>
@@ -35,20 +33,21 @@
         </el-form>
         <baidu-map class="map"
                    :center="{lng: 114.02919,lat: 30.58203,}"
-                   :zoom="10"
+                   :zoom="12"
                    :scroll-wheel-zoom = "true">
             <div v-for = "marker of markers" >
                 <bm-marker
                         :position="{lat: marker.lat, lng: marker.lng}"
-                        :dragging="true"
-                        v-show:false
-                        :icon = "{url: require('../../assets/images/red.png'), size: {width: 32, height: 32}}"
+                        :dragging="false"
+                        :height="marker.height"
+                        :width="marker.width"
                         @click="infoWindowOpen(marker)">
                         <bm-info-window
                             :show="marker.showFlag"
                             :position="{lng: marker.lng, lat: marker.lat}"
                             @close="infoWindowClose(marker)">
                         <p class = "text">{{'监控点：'+marker.Monitor_points}}</p>
+                        <el-image :src = "marker.Image_path" fit="cover"></el-image>
                     </bm-info-window>
                 </bm-marker>
             </div>
@@ -102,7 +101,6 @@
                 };
                 axios.post('/api/showMonitor/',qs.stringify(params)).then(res=>{
                     this.markers = res.data;
-                    console.log(this.markers);
                 },error=>{
                     console.log(error)
                 })
