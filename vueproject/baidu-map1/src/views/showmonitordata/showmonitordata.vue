@@ -24,10 +24,23 @@
                         :auto-upload= 'true'
                         action="http://127.0.0.1:8000/api/uploadMonitor"
                         accept=".xls,.xlsx"
+                        :show-file-list="false"
                         :multiple= 'false'
                         :limit="1"
                         :http-request="uploadFile">
                     <el-button type="primary">文件上传</el-button>
+                </el-upload>
+            </el-col>
+            <el-col style="float: right;width: 10%;">
+                <el-upload
+                        class="upload-demo"
+                        :auto-upload= 'true'
+                        action="http://127.0.0.1:8000/api/uploadMonitor"
+                        accept=".png,.jpg,.jpge"
+                        :show-file-list="false"
+                        :multiple= 'true'
+                        :http-request="uploadImage">
+                    <el-button type="primary">图片上传</el-button>
                 </el-upload>
             </el-col>
         </el-form>
@@ -112,6 +125,28 @@
                 marker.showFlag = true
             },
             uploadFile (item) {
+                console.log(item);
+                let form = new FormData();
+                form.append('file',item.file);
+                let config={
+                    headers:{'Content-type':'multipart/form-data'}
+                }
+                axios({
+                    method:"post",
+                    url:"/api/uploadMonitor/",
+                    headers:{'Content-type':'multipart/form-data'},
+                    data:form
+                }).then(
+                    res=>{
+                        // console(res.data)
+                        this.$message({
+                            type:'info',
+                            message: res.data.msg
+                        })
+                    },
+                );
+            },
+            uploadImage (item) {
                 console.log(item);
                 let form = new FormData();
                 form.append('file',item.file);
