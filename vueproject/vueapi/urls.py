@@ -10,4 +10,5 @@ urlpatterns = [
     url('delData/', views.delData),
     url('uploadMonitor/', views.uploadMonitor),
     url('showMonitor/', views.showMonitor),
+    url('uploadImage/', views.uploadImage),
 ]

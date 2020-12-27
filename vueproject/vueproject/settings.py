@@ -25,7 +25,7 @@ SECRET_KEY = '8mmmm)lpklgu-10iw%0ae&pdc2sv&$_5lf_1y505fa7lcd%m6d'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -63,6 +63,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -125,7 +126,7 @@ USE_TZ = True
 
 # FRONTEND_ROOT = 'dist'
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR,"static/")
+STATIC_ROOT = os.path.join(BASE_DIR,"static/")
 # STATICFILES_DIRS = (
 #     os.path.join(BASE_DIR, FRONTEND_ROOT),
 #     os.path.join(BASE_DIR, FRONTEND_ROOT + '/static/'),
@@ -134,3 +135,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "dist/static"),
 )
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'media').replace("\\", "/")

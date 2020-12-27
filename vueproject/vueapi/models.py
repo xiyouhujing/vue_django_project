@@ -2,9 +2,9 @@ from django.db import models
 
 # Create your models here.
 class File(models.Model):
-    name = models.CharField(max_length = 50)
+    name = models.CharField(max_length=50)
     file = models.FileField(upload_to='upload/%Y/%m/%d')
-    size = models.CharField(max_length = 50)
+    size = models.CharField(max_length=50)
 
     def __unicode__(self):
         return self.name
@@ -43,3 +43,13 @@ class User(models.Model):
 
     def __unicode__(self):
         return self.username
+
+class Picture(models.Model):
+    pic_name = models.CharField(max_length=50)
+    pic_size = models.CharField(max_length=50,null=True)
+    # pic_height = models.DecimalField(max_digits=5, decimal_places=2)
+    # pic_width = models.DecimalField(max_digits=5, decimal_places=2)
+    pic_path = models.ImageField(upload_to='pic_folder/', default='pic_folder/None/no_image.pig')
+
+    def __unicode__(self):
+        return self.pic_name

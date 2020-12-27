@@ -18,12 +18,18 @@ from django.contrib import admin
 from vueapi import urls
 from django.views.generic.base import TemplateView
 
-from django.views import static
+from django.views.static import serve
 from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'api/', include('vueapi.urls')),
-    # url(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'),
+    url(r'^media/(?P<path>.*)$',serve,{"document_root":settings.MEDIA_ROOT}),
+    # path(r'media/(?P<path>.*)', serve,{'document_root': settings.MEDIA_ROOT}),
     url(r'^$', TemplateView.as_view(template_name="index.html")),
-]
+] +static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# if settings.DEBUG:
+#     urlpatterns += urlpatterns('', url(r'^media/(?P<path>.*)$','django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+#                                url(r'^static/(?P<path>.*)$','django.views.static.serve', {'document_root': settings.STATIC_ROOT}), )

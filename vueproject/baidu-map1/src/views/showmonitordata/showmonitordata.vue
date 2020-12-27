@@ -35,7 +35,7 @@
                 <el-upload
                         class="upload-demo"
                         :auto-upload= 'true'
-                        action="http://127.0.0.1:8000/api/uploadMonitor"
+                        action="http://127.0.0.1:8000/api/uploadImage"
                         accept=".png,.jpg,.jpge"
                         :show-file-list="false"
                         :multiple= 'true'
@@ -155,7 +155,7 @@
                 }
                 axios({
                     method:"post",
-                    url:"/api/uploadMonitor/",
+                    url:"/api/uploadImage/",
                     headers:{'Content-type':'multipart/form-data'},
                     data:form
                 }).then(

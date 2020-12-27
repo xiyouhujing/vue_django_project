@@ -15,8 +15,10 @@ import xlrd
 import pandas as pd
 import numpy as np
 from xlrd import xldate_as_tuple
+import urllib
 
-from .models import File,Content,User,Monitor
+from vueproject import settings
+from .models import File,Content,User,Monitor,Picture
 
 def parse(x):
     if x is None or x == '' or pd.isnull(x):
@@ -383,7 +385,32 @@ def showMonitor(request):
             mon_dic['lng'] = m.Longitude
             mon_dic['lat'] = m.Latitude
             mon_dic['showFlag'] = False
+
+            # pic_data = Picture.objects.filter(pic_name=m.Monitor_points)[0]
+            # path = pic_data.pic_path
+            head_path = 'http://127.0.0.1:8000/media/pic_folder/'+ format(urllib.request.quote(str(m.Monitor_points),'utf-8'))+'.jpg'
+            mon_dic['Image_path'] = head_path
+            print(head_path)
+
             mon_list.append(mon_dic)
 
         return JsonResponse(mon_list, safe=False)
 
+def uploadImage(request):
+    ret = {}
+    if request.method=='POST':
+        pic_obj = request.FILES.get('file')
+        new_pic = Picture()
+        name = pic_obj.name
+        size = pic_obj.size
+        print(size)
+
+        ret['name'] = name
+        ret['msg'] = '上传成功'
+        new_pic.pic_name = name
+        new_pic.pic_size = size
+        new_pic.pic_path = pic_obj
+        print(new_pic.pic_path)
+        new_pic.save()
+
+        return JsonResponse(ret,safe=False)
