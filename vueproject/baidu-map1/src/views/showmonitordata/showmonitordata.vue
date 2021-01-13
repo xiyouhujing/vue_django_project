@@ -114,6 +114,7 @@
                 };
                 axios.post('/api/showMonitor/',qs.stringify(params)).then(res=>{
                     this.markers = res.data;
+                    console.log(this.markers);
                 },error=>{
                     console.log(error)
                 })

@@ -16,6 +16,8 @@ import pandas as pd
 import numpy as np
 from xlrd import xldate_as_tuple
 import urllib
+from io import BytesIO
+from PIL import Image
 
 from vueproject import settings
 from .models import File,Content,User,Monitor,Picture
@@ -389,8 +391,14 @@ def showMonitor(request):
             # pic_data = Picture.objects.filter(pic_name=m.Monitor_points)[0]
             # path = pic_data.pic_path
             head_path = 'http://127.0.0.1:8000/media/pic_folder/'+ format(urllib.request.quote(str(m.Monitor_points),'utf-8'))+'.jpg'
+            response = requests.get(head_path)
+            image = Image.open(BytesIO(response.content),'r')
+            img_size = image.size
             mon_dic['Image_path'] = head_path
+            mon_dic['width'] = img_size[0]
+            mon_dic['height'] = img_size[1]
             print(head_path)
+            print(img_size[0])
 
             mon_list.append(mon_dic)
 

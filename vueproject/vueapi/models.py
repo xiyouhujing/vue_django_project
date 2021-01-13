@@ -47,8 +47,6 @@ class User(models.Model):
 class Picture(models.Model):
     pic_name = models.CharField(max_length=50)
     pic_size = models.CharField(max_length=50,null=True)
-    # pic_height = models.DecimalField(max_digits=5, decimal_places=2)
-    # pic_width = models.DecimalField(max_digits=5, decimal_places=2)
     pic_path = models.ImageField(upload_to='pic_folder/', default='pic_folder/None/no_image.pig')
 
     def __unicode__(self):
